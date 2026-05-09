@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, CameraIcon, FileTextIcon,Building2Icon, Settings2Icon, CircleHelpIcon, SearchIcon, DatabaseIcon, FileChartColumnIcon, FileIcon, CommandIcon } from "lucide-react"
+import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, CameraIcon, FileTextIcon, Building2Icon, Settings2Icon, CircleHelpIcon, SearchIcon, DatabaseIcon, FileChartColumnIcon, FileIcon, CommandIcon } from "lucide-react"
 
 const data = {
   user: {
@@ -25,7 +25,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: (
         <LayoutDashboardIcon
         />
@@ -33,31 +33,31 @@ const data = {
     },
     {
       title: "Bolsa de trabajo",
-      url: "#",
+      url: "/bolsa-trabajo",
       icon: (
-        <ListIcon 
+        <ListIcon
         />
       ),
     },
     {
       title: "Empresa",
-      url: "#",
+      url: "/empresa",
       icon: (
-        <Building2Icon 
+        <Building2Icon
         />
       ),
     },
     {
       title: "Avance PEA",
-      url: "#",
+      url: "/avance-pea",
       icon: (
-        <FolderIcon 
+        <FolderIcon
         />
       ),
     },
     {
       title: "Perfil",
-      url: "#",
+      url: "/perfil",
       icon: (
         <UsersIcon
         />
