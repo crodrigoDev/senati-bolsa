@@ -17,22 +17,26 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardTitle className="flex items-center justify-between text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            <span>Promedio del Semestre</span>
-
+            <span>Total Empresas</span>
+              
             <TrendingUpIcon className="size-5" />
           </CardTitle>
         </CardHeader>
 
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium text-3xl">
-            19
+            12
           </div>
+          <h1>Empresas registradas en el sistema</h1>
+          <h1>
+            <span className="text-green-500 font-semibold">+12%</span> desde el mes pasado
+          </h1>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
           <CardTitle className="flex items-center justify-between text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            <span>Promedio del Semestre</span>
+            <span>Total carreras</span>
 
             <TrendingUpIcon className="size-5" />
           </CardTitle>
@@ -40,101 +44,47 @@ export function SectionCards() {
 
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium text-3xl">
-            19
+            5
           </div>
+            <h1>Carreras con aprendices registrados</h1>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
+            Total Aprendices
           </CardTitle>
           <CardAction>
-            <Badge variant="outline">
-              <TrendingUpIcon
-              />
-              +12.5%
-            </Badge>
+            <TrendingUpIcon className="size-5" />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention{" "}
-            <TrendingUpIcon className="size-4" />
+          <div className="line-clamp-1 flex gap-2 font-medium text-3xl">
+            199
           </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
-        </CardFooter>
-      </Card>
-
-      Avance Pea
-      
-
-            <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <TrendingUpIcon
-              />
-              +12.5%
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention{" "}
-            <TrendingUpIcon className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
-        </CardFooter>
-      </Card>
-
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <TrendingUpIcon
-              />
-              +12.5%
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention{" "}
-            <TrendingUpIcon className="size-4" />
-          </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
+            <h1>Aprendices en practicas</h1>
+            <h1>
+            <span className="text-green-500 font-semibold">+8%</span> desde el mes pasado
+          </h1>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Growth Rate</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4.5%
+            Promedio de Avance
           </CardTitle>
           <CardAction>
-            <Badge variant="outline">
-              <TrendingUpIcon
-              />
-              +4.5%
-            </Badge>
+              <TrendingUpIcon className="size-5" />
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Steady performance increase{" "}
-            <TrendingUpIcon className="size-4" />
+          <div className="line-clamp-1 flex gap-2 font-medium text-3xl">
+            79%
           </div>
-          <div className="text-muted-foreground">Meets growth projections</div>
+          <h1>Promedio avance de tareas</h1>
+          <h1>
+            <span className="text-green-500 font-semibold">+5%</span> desde el mes pasado
+          </h1>
         </CardFooter>
       </Card>
     </div>
