@@ -25,9 +25,9 @@ export default function ThemeToggle() {
   return (
     <Button
       onClick={toggleTheme}
-      size={'icon'}
+      size={'icon-lg'}
       variant={'outline'}
-      className="rounded-full"
+      className="rounded-sm cursor-pointer transition-all hover:-translate-y-0.5 duration-200"
       title={`Tema actual: ${theme}`}
     >
       {/* mostramos el icono segun el estado actual */}

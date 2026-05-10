@@ -36,7 +36,7 @@ export function LoginForm() {
 
   const onSubmit = (data: UsuarioLogin) => {
     console.log(data)
-    router.push('/dashboard')
+    router.push('/instructor-seguimiento/dashboard')
   }
   return (
       <Card className=" px-2 py-10">

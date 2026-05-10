@@ -3,7 +3,7 @@ import { EmailForm } from "./_components/email-form"
 import SenatiLogo from "@/assets/Senati-Symbol.svg"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
-import ToggleTheme from "@/components/ToggleTheme"
+import ToggleTheme from "@/components/AppHeader/ToggleTheme"
 import Typewriter from "typewriter-effect"
 
 export default function page() {

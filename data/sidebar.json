@@ -1,0 +1,27 @@
+[
+    {
+        "label": "Dashboard",
+        "ruta": "/instructor-seguimiento/dashboard",
+        "icon": "ChartArea"
+    },
+    {
+        "label": "PEA",
+        "ruta": "/instructor-seguimiento/pea",
+        "icon": "BookCheck"
+    },
+    {
+        "label": "Empresa",
+        "ruta": "/instructor-seguimiento/empresa",
+        "icon": "Building2"
+    },
+    {
+        "label": "Instructores",
+        "ruta": "/instructor-seguimiento/instructores",
+        "icon": "Presentation"
+    },
+    {
+        "label": "Perfil",
+        "ruta": "/instructor-seguimiento/perfil",
+        "icon": "User"
+    }
+]
