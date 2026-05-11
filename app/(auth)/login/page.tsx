@@ -3,7 +3,6 @@ import { LoginForm } from "./_components/login-form"
 import SenatiLogo from "@/assets/Senati-Symbol.svg"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
-import ToggleTheme from "@/components/AppHeader/ToggleTheme"
 import Typewriter from "typewriter-effect"
 
 export default function page() {
@@ -41,7 +40,6 @@ export default function page() {
           </Label>
         </div>
         <LoginForm />
-        <ToggleTheme></ToggleTheme>
       </div>
     </div>
   )
