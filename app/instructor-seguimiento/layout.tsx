@@ -1,5 +1,5 @@
 import AppSidebar from "@/components/layout/AppSidebar";
-import { SidebarProvider, SidebarInset} from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import AppHeader from "@/components/layout/AppHeader";
 
 export default function RootLayout({
@@ -9,14 +9,14 @@ export default function RootLayout({
 }>) {
   return (
     <SidebarProvider>
-      <AppSidebar/>
+      <AppSidebar />
       <SidebarInset>
-        <AppHeader/>
+        <AppHeader />
         <main>
           {children}
         </main>
       </SidebarInset>
     </SidebarProvider>
-    
+
   );
 }

@@ -68,9 +68,11 @@ export default function PerfilDropDown() {
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator/>
-            <DropdownMenuItem className='gap-4 h-8'>
-                <LogOut/>
-                <span className='font-medium'>Cerrar sesión</span>
+            <DropdownMenuItem className='gap-4 h-8' asChild>
+                <Link href='/login'>
+                    <LogOut/>
+                    <span className='font-medium'>Cerrar sesión</span>
+                </Link>
             </DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
