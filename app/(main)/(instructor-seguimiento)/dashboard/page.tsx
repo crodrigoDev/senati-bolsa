@@ -28,7 +28,7 @@ export default function Page() {
                     <CardTitle>Progreso de Carreras</CardTitle>
                   </CardHeader>
 
-                 <CardContent className="space-y-4">
+                  <CardContent className="space-y-4">
                     <div>
                       <p className="text-sm mb-1">Activas</p>
                       <Progress value={67} />

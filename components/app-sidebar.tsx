@@ -1,9 +1,10 @@
 "use client"
 
 import * as React from "react"
-
+import { Label } from "@/components/ui/label"
 import { NavMain } from "@/components/nav-main"
 import Image from "next/image"
+import SenatiLogo from "@/assets/Senati-Symbol.svg"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -32,10 +33,10 @@ const data = {
       ),
     },
     {
-      title: "Bolsa de trabajo",
-      url: "/bolsa-trabajo",
+      title: "PEA",
+      url: "/pea",
       icon: (
-        <ListIcon
+        <ChartBarIcon
         />
       ),
     },
@@ -48,10 +49,10 @@ const data = {
       ),
     },
     {
-      title: "Avance PEA",
-      url: "/avance-pea",
+      title: "Instructores",
+      url: "/instructores",
       icon: (
-        <FolderIcon
+        <UsersIcon
         />
       ),
     },
@@ -134,16 +135,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="h-auto p-0 hover:bg-transparent"
             >
-              <a className="flex w-full justify-center py-0">
+              <div className="flex items-center p-2 gap-4">
                 <Image
-                  src="/imagenes/image.png"
-                  alt="Logo"
-                  width={200}
-                  height={50}
-                  className="object-contain"
-                  priority
+                  src={SenatiLogo}
+                  alt="logo de senati"
+                  height={90}
+                  width={60}
+                  className="invert dark:invert-0"
                 />
-              </a>
+                <Label className="text-4xl font-bold">
+                  SENATI
+                </Label>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

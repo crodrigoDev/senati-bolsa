@@ -3,9 +3,6 @@ import "./globals.css"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
-import { SidebarProvider } from "@/components/ui/sidebar"
-
-import { AppSidebar } from "@/components/app-sidebar"
 
 const geist = Geist({
   subsets: ["latin"],
@@ -36,14 +33,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <TooltipProvider>
-            <SidebarProvider>
-              <div className="flex min-h-screen w-full">
-                <AppSidebar />
-                <div className="flex-1 overflow-auto w-full">
-                  {children}
-                </div>
-              </div>
-            </SidebarProvider>
+            {children}
           </TooltipProvider>
         </ThemeProvider>
       </body>

@@ -11,15 +11,19 @@ export default function PerfilPage() {
     const [editarContrasenia, setEditarContrasenia] = useState(false)
     const [editarPerfil, setEditarPerfil] = useState(false)
     return (
-        <div className="text-3xl font-bold p-5">
-            <h1>Mi Perfil</h1>
-            <p className="text-sm text-muted-foreground font-normal">Gestiona tu información personal</p>
+        <div className="p-8 md:p-12 space-y-6 w-full h-full">
+            <header className="flex items-start justify-between">
+                <div className="text-3xl font-bold">
+                    <h1>Mi Perfil</h1>
+                    <p className="text-sm text-muted-foreground font-normal mt-1">Gestiona tu información personal</p>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" onClick={() => setEditarPerfil(true)}>
+                        <EditIcon /> Editar perfil
+                    </Button>
+                </div>
+            </header>
 
-            <div className="flex items-center gap-2">
-                <Button className="mt-8 mb-8" variant="outline" onClick={() => setEditarPerfil(true)}>
-                    <EditIcon /> Editar perfil
-                </Button>
-            </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 <div className="flex flex-col items-center justify-center space-y-6">
                     <div className="flex flex-col items-center gap-4">
