@@ -1,41 +1,27 @@
 package com.example.senati_bolsa.service;
 
-import com.example.senati_bolsa.model.Usuario;
 import com.example.senati_bolsa.repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository repo;
 
-    public Usuario obtenerPerfil(Integer id) {
-        return usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    public List<Map<String, Object>> obtenerPerfil(Integer id) {
+        return repo.obtenerPerfilPorId(id);
     }
 
-    @Transactional
-    public void actualizarPerfil(Integer id, Usuario usuario) {
-        usuarioRepository.actualizarPerfil(
-                id,
-                usuario.getNombres(),
-                usuario.getApellidos(),
-                usuario.getNumero(),
-                usuario.getFotoUrl());
+    public void actualizarPerfil(Integer id, String nombres, String apellidos, String numero, String fotoUrl) {
+        repo.actualizarPerfil(id, nombres, apellidos, numero, fotoUrl);
     }
 
-    @Transactional
-    public void cambiarPassword(Integer id, String passwordActual, String passwordNueva) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        if (!usuario.getPassword().equals(passwordActual)) {
-            throw new RuntimeException("La contraseña actual es incorrecta");
-        }
-
-        usuarioRepository.actualizarPassword(id, passwordNueva);
+    public void cambiarPassword(Integer id, String nuevaPass) {
+        repo.actualizarPassword(id, nuevaPass);
     }
 }
