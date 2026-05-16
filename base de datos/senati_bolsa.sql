@@ -2,9 +2,7 @@ DROP DATABASE IF EXISTS senati_bolsa;
 CREATE DATABASE senati_bolsa;
 USE senati_bolsa;
 
--- ==========================================
--- ESTRUCTURA DE TABLAS
--- ==========================================
+-- Creacion de las tablas
 
 -- Tabla de Roles
 CREATE TABLE roles (
@@ -70,9 +68,8 @@ CREATE TABLE instructores (
     FOREIGN KEY (carrera_id) REFERENCES carreras(id) ON DELETE SET NULL
 );
 
--- ==========================================
--- PROCEDIMIENTOS ALMACENADOS
--- ==========================================
+-- Procedimientos almacenados
+
 DELIMITER //
 
 -- 1. USUARIOS / PERFIL
