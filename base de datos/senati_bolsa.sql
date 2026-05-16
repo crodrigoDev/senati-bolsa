@@ -16,6 +16,7 @@ CREATE TABLE usuarios (
     numero VARCHAR(20),
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
+    foto_url VARCHAR(255),
     rol_id INT,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (rol_id) REFERENCES roles(id)
@@ -92,13 +93,15 @@ CREATE PROCEDURE SP_ActualizarPerfil(
     IN p_id INT,
     IN p_nombres VARCHAR(100),
     IN p_apellidos VARCHAR(100),
-    IN p_numero VARCHAR(20)
+    IN p_numero VARCHAR(20),
+    IN p_foto_url VARCHAR(255)
 )
 BEGIN
     UPDATE usuarios 
     SET nombres = p_nombres, 
         apellidos = p_apellidos, 
-        numero = p_numero 
+        numero = p_numero,
+        foto_url = p_foto_url
     WHERE id = p_id;
 END //
 
@@ -278,6 +281,7 @@ BEGIN
            u.apellidos, 
            u.email AS correo_institucional, 
            u.numero AS telefono, 
+           u.foto_url,
            c.nombre AS carrera_nombre 
     FROM instructores i
     JOIN usuarios u ON i.usuario_id = u.id
@@ -292,6 +296,7 @@ BEGIN
            u.apellidos, 
            u.email AS correo_institucional, 
            u.numero AS telefono, 
+           u.foto_url,
            c.nombre AS carrera_nombre 
     FROM instructores i
     JOIN usuarios u ON i.usuario_id = u.id

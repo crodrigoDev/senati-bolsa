@@ -27,7 +27,10 @@ export default function PerfilPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 <div className="flex flex-col items-center justify-center space-y-6">
                     <div className="flex flex-col items-center gap-4">
-                        <CircleUser className="size-50" />
+                        <Avatar className="h-32 w-32">
+                            <AvatarImage src="/placeholder-user.jpg" alt="Usuario" />
+                            <AvatarFallback><CircleUser className="h-20 w-20" /></AvatarFallback>
+                        </Avatar>
                         <Input id="foto" type="file" className="max-w-xs" />
                     </div>
 
