@@ -52,14 +52,14 @@ CREATE TABLE carreras (
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabla de Aprendices
-CREATE TABLE aprendices (
+-- Tabla de Instructores
+CREATE TABLE instructores (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
     carrera_id INT,
-    ciclo INT NOT NULL CHECK (ciclo >= 1 AND ciclo <= 6),
-    avance_porcentaje DECIMAL(5,2) DEFAULT 0.00 CHECK (avance_porcentaje >= 0 AND avance_porcentaje <= 100),
-    fecha_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    dni VARCHAR(8) UNIQUE,
+    correo_personal VARCHAR(150),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (carrera_id) REFERENCES carreras(id) ON DELETE SET NULL
 );
@@ -77,7 +77,7 @@ CREATE PROCEDURE SP_ObtenerUsuarioPorEmail(
     IN p_email VARCHAR(150)
 )
 BEGIN
-    SELECT * FROM usuarios WHERE email = p_email AND activo = TRUE;
+    SELECT * FROM usuarios WHERE email = p_email;
 END //
 
 CREATE PROCEDURE SP_ObtenerUsuarioPorId(
@@ -240,62 +240,88 @@ BEGIN
 END //
 
 -- ------------------------------------------
--- MÓDULO: APRENDICES
+-- MÓDULO: INSTRUCTORES
 -- ------------------------------------------
-CREATE PROCEDURE SP_CrearAprendiz(
-    IN p_usuario_id INT,
+
+-- Procedimiento para registrar un instructor completo (Usuario + Instructor)
+CREATE PROCEDURE SP_RegistrarInstructorCompleto(
+    IN p_nombres VARCHAR(100),
+    IN p_apellidos VARCHAR(100),
+    IN p_telefono VARCHAR(20),
+    IN p_email_institucional VARCHAR(150),
+    IN p_password VARCHAR(255),
+    IN p_rol_id INT,
     IN p_carrera_id INT,
-    IN p_ciclo INT
+    IN p_dni VARCHAR(8),
+    IN p_correo_personal VARCHAR(150)
 )
 BEGIN
-    INSERT INTO aprendices (usuario_id, carrera_id, ciclo)
-    VALUES (p_usuario_id, p_carrera_id, p_ciclo);
+    DECLARE v_usuario_id INT;
+    
+    -- 1. Insertar en la tabla de usuarios
+    INSERT INTO usuarios (nombres, apellidos, numero, email, password, rol_id)
+    VALUES (p_nombres, p_apellidos, p_telefono, p_email_institucional, p_password, p_rol_id);
+    
+    SET v_usuario_id = LAST_INSERT_ID();
+    
+    -- 2. Insertar en la tabla de instructores
+    INSERT INTO instructores (usuario_id, carrera_id, dni, correo_personal)
+    VALUES (v_usuario_id, p_carrera_id, p_dni, p_correo_personal);
 END //
 
-CREATE PROCEDURE SP_ObtenerAprendiz(
+CREATE PROCEDURE SP_ObtenerInstructor(
     IN p_id INT
 )
 BEGIN
-    SELECT a.*, u.nombres, u.apellidos, u.email, c.nombre AS carrera_nombre 
-    FROM aprendices a
-    JOIN usuarios u ON a.usuario_id = u.id
-    LEFT JOIN carreras c ON a.carrera_id = c.id
-    WHERE a.id = p_id;
+    SELECT i.*, 
+           u.nombres, 
+           u.apellidos, 
+           u.email AS correo_institucional, 
+           u.numero AS telefono, 
+           c.nombre AS carrera_nombre 
+    FROM instructores i
+    JOIN usuarios u ON i.usuario_id = u.id
+    LEFT JOIN carreras c ON i.carrera_id = c.id
+    WHERE i.id = p_id;
 END //
 
-CREATE PROCEDURE SP_ListarAprendices()
+CREATE PROCEDURE SP_ListarInstructores()
 BEGIN
-    SELECT a.*, u.nombres, u.apellidos, u.email, c.nombre AS carrera_nombre 
-    FROM aprendices a
-    JOIN usuarios u ON a.usuario_id = u.id
-    LEFT JOIN carreras c ON a.carrera_id = c.id;
+    SELECT i.*, 
+           u.nombres, 
+           u.apellidos, 
+           u.email AS correo_institucional, 
+           u.numero AS telefono, 
+           c.nombre AS carrera_nombre 
+    FROM instructores i
+    JOIN usuarios u ON i.usuario_id = u.id
+    LEFT JOIN carreras c ON i.carrera_id = c.id;
 END //
 
-CREATE PROCEDURE SP_ActualizarAprendiz(
+CREATE PROCEDURE SP_ActualizarInstructor(
     IN p_id INT,
     IN p_carrera_id INT,
-    IN p_ciclo INT
+    IN p_dni VARCHAR(8),
+    IN p_correo_personal VARCHAR(150)
 )
 BEGIN
-    UPDATE aprendices 
+    UPDATE instructores 
     SET carrera_id = p_carrera_id,
-        ciclo = p_ciclo
+        dni = p_dni,
+        correo_personal = p_correo_personal
     WHERE id = p_id;
 END //
 
-CREATE PROCEDURE SP_ActualizarAvanceAprendiz(
-    IN p_id INT,
-    IN p_avance DECIMAL(5,2)
-)
-BEGIN
-    UPDATE aprendices SET avance_porcentaje = p_avance WHERE id = p_id;
-END //
-
-CREATE PROCEDURE SP_EliminarAprendiz(
+CREATE PROCEDURE SP_EliminarInstructor(
     IN p_id INT
 )
 BEGIN
-    DELETE FROM aprendices WHERE id = p_id;
+    -- Obtenemos el usuario_id para eliminar también el usuario asociado
+    DECLARE v_usuario_id INT;
+    SELECT usuario_id INTO v_usuario_id FROM instructores WHERE id = p_id;
+    
+    DELETE FROM instructores WHERE id = p_id;
+    DELETE FROM usuarios WHERE id = v_usuario_id;
 END //
 
 -- ------------------------------------------
@@ -305,10 +331,8 @@ CREATE PROCEDURE SP_ObtenerEstadisticasDashboard()
 BEGIN
     SELECT COUNT(*) AS total_empresas FROM empresas;
     SELECT COUNT(*) AS total_carreras FROM carreras;
-    SELECT COUNT(*) AS total_aprendices FROM aprendices;
-    SELECT IFNULL(ROUND(AVG(avance_porcentaje), 2), 0) AS promedio_avance FROM aprendices;
+    SELECT COUNT(*) AS total_instructores FROM instructores;
     SELECT estado, COUNT(*) AS cantidad FROM carreras GROUP BY estado;
-    SELECT ciclo, COUNT(*) AS cantidad FROM aprendices GROUP BY ciclo ORDER BY ciclo;
 END //
 
 DELIMITER ;

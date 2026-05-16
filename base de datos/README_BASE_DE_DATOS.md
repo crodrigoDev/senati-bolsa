@@ -6,14 +6,12 @@ Este documento centraliza el modelo de datos unificado para todos los módulos d
 El dashboard requiere indicadores clave que se calculan a través del procedimiento almacenado `SP_ObtenerEstadisticasDashboard`. Las métricas son:
 - **Total empresas:** Conteo total de registros en la tabla `empresas`.
 - **Total carreras:** Conteo total de registros en la tabla `carreras`.
-- **Total aprendices:** Conteo total de registros en la tabla `aprendices`.
-- **Promedio avance:** Promedio del campo `avance_porcentaje` de todos los aprendices.
+- **Total instructores:** Conteo total de registros en la tabla `instructores`.
 - **Progreso de carreras:** Agrupación y conteo por el campo `estado` de la tabla `carreras` (`activas`, `por validar`, `inactivas`).
-- **Aprendices por ciclo:** Agrupación y conteo por el campo `ciclo` de la tabla `aprendices`.
 
 ## 👤 2. Módulo: Usuario (Perfil Institucional)
 La información principal de acceso se almacena en la tabla `usuarios`. **Importante:** Al ser un sistema institucional, los usuarios NO se crean directamente desde la aplicación, por lo que no existen funciones de registro público. Ya deben existir previamente en la base de datos.
-- **Campos principales:** `id`, `nombres`, `apellidos`, `numero`, `email`, `password`, `rol_id`, `activo` (Boolean), `fecha_creacion`.
+- **Campos principales:** `id`, `nombres`, `apellidos`, `numero`, `email`, `password`, `rol_id`, `fecha_creacion`.
 - **Procedimientos principales:**
   - `SP_ObtenerUsuarioPorEmail` y `SP_ObtenerUsuarioPorId`: Para validación de sesión y carga de datos.
   - `SP_ActualizarPerfil`: Para editar los datos personales permitidos.
@@ -32,10 +30,17 @@ Para la seguridad de la recuperación de contraseñas, se usa la tabla independi
 - **Campos principales:** `id`, `nombre`, `estado` ('activa', 'por validar', 'inactiva').
 - **Procedimientos principales:** `SP_CrearCarrera`, `SP_ListarCarreras`, `SP_ObtenerCarrera`, `SP_ActualizarCarrera`, `SP_CambiarEstadoCarrera`.
 
-## 👨‍🎓 6. Módulo: Aprendices
-Almacena el perfil académico del estudiante y lo enlaza a su cuenta de usuario y carrera.
-- **Campos principales:** `id`, `usuario_id`, `carrera_id`, `ciclo` (1-6), `avance_porcentaje` (0-100).
-- **Procedimientos principales:** `SP_CrearAprendiz`, `SP_ListarAprendices`, `SP_ObtenerAprendiz`, `SP_ActualizarAprendiz`, `SP_ActualizarAvanceAprendiz`, `SP_EliminarAprendiz`.
+## 👨‍🏫 6. Módulo: Instructores
+Almacena el perfil del instructor y lo enlaza a su cuenta de usuario y carrera.
+- **Campos principales:** `id`, `usuario_id`, `carrera_id`, `dni`, `correo_personal`.
+- **Relación de Correos:**
+  - **Correo Institucional:** Se almacena en `usuarios.email` (se usa para el login).
+  - **Correo Personal:** Se almacena en `instructores.correo_personal`.
+- **Procedimientos principales:**
+  - `SP_RegistrarInstructorCompleto`: Registra simultáneamente el Usuario (datos base) y el Instructor (datos específicos).
+  - `SP_ListarInstructores` / `SP_ObtenerInstructor`: Retornan la información unificada, incluyendo el alias `correo_institucional`.
+  - `SP_ActualizarInstructor`: Actualiza los datos específicos del perfil.
+  - `SP_EliminarInstructor`: Elimina tanto el registro de instructor como el usuario asociado.
 
 ---
 
