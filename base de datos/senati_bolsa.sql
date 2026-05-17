@@ -2,33 +2,35 @@ DROP DATABASE IF EXISTS senati_bolsa;
 CREATE DATABASE senati_bolsa;
 USE senati_bolsa;
 
--- Tabla de Roles
+-- tabla de roles
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Tabla de Usuarios
+-- tabla de usuarios
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
     numero VARCHAR(20),
     email VARCHAR(150) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    rol_id INT,
+    estado VARCHAR(20) DEFAULT 'ACTIVO',  -- nuevo (ACTIVO, INACTIVO, BLOQUEADO)
+    password VARCHAR(255) NOT NULL,     
+    rol_id INT NOT NULL,                 
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (rol_id) REFERENCES roles(id)
 );
 
--- Tabla de Códigos de Verificación
+-- tabla de codigos de verificacion
 CREATE TABLE verify_codes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     codigo VARCHAR(6) NOT NULL,
-    email_usuario VARCHAR(150) NOT NULL,
-    fecha_expiracion DATETIME NOT NULL,
-    usado BOOLEAN DEFAULT FALSE,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    usuario_id INT NOT NULL,            -- ahora con id de usuario, antes con email
+    estado VARCHAR(20) DEFAULT 'DISPONIBLE', -- ahora en varchar para funcion con enum en spring (DISPONIBLE, USADO, EXPIRADO)
+    fecha_expiracion DATETIME NOT NULL,  
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE 
 );
 
 -- Tabla de Empresas

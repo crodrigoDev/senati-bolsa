@@ -14,10 +14,11 @@ import { useForm} from "react-hook-form"
 import { recoverSchema, type UsuarioRecover } from "@/utils/validators/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRecover } from "@/hooks/auth/useRecover"
 
 
 export function EmailForm() {
+  const { handleSendEmail } = useRecover();
   const {register, handleSubmit, formState: {errors}} = useForm({
     defaultValues: {
       email: ''
@@ -26,12 +27,9 @@ export function EmailForm() {
     mode: "onSubmit",
     reValidateMode: "onBlur"
   })
-  const router = useRouter()
 
   const onSubmit = (data: UsuarioRecover) => {
-    console.log(data)
-    router.push('/verify-code')
-
+    handleSendEmail(data)
   }
   return (
       <Card className=" px-2 py-10">

@@ -6,10 +6,18 @@ import { User, Settings, CircleQuestionMark, LogOut } from 'lucide-react'
 import { Label } from '../ui/label'
 import { Badge } from '../ui/badge'
 import Link from 'next/link'
+import { useAuth } from '@/context/authContext'
+import { useRouter } from 'next/navigation'
 
 
 
 export default function PerfilDropDown() {
+    const {logout} = useAuth();
+    const router = useRouter();
+    const handleLogout = () => {
+        logout();
+        router.push('/login')
+    }
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -68,11 +76,9 @@ export default function PerfilDropDown() {
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator/>
-            <DropdownMenuItem className='gap-4 h-8' asChild>
-                <Link href='/login'>
-                    <LogOut/>
-                    <span className='font-medium'>Cerrar sesión</span>
-                </Link>
+            <DropdownMenuItem className='gap-4 h-8' onClick={handleLogout}>
+                <LogOut/>
+                <span className='font-medium'>Cerrar sesión</span>
             </DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>

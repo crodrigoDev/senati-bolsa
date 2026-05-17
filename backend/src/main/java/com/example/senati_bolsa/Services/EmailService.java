@@ -3,6 +3,7 @@ package com.example.senati_bolsa.Services;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.MessagingException;
@@ -17,6 +18,7 @@ public class EmailService {
     @Value("${spring.mail.username")
     private String remitente;
 
+    @Async
     public void enviarCodigoVerificacion(String correoDestino, String nombre, String codigo){
         String asunto = "Código de Recuperación - Bolsa de Senati";
 

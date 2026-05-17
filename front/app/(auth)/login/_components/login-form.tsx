@@ -19,13 +19,18 @@ import { useForm, Controller } from "react-hook-form"
 import { loginSchema, type UsuarioLogin } from "@/utils/validators/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/context/authContext"
+import { Spinner } from "@/components/ui/spinner"
 
 export function LoginForm() {
+  const {login} = useAuth();
+  const [authError, setAuthError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
   const {register, handleSubmit, control, formState: {errors}} = useForm({
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
       isRecovered: false
     },
@@ -34,9 +39,19 @@ export function LoginForm() {
     reValidateMode: "onBlur"
   })
 
-  const onSubmit = (data: UsuarioLogin) => {
-    console.log(data)
-    router.push('/instructor-seguimiento/dashboard')
+  const onSubmit = async (data: UsuarioLogin) => {
+    setAuthError("")
+    setIsLoading(true)
+    try{
+      await login(data);
+      router.push("/instructor-seguimiento/dashboard")
+    } catch(error: unknown){
+      setIsLoading(false)
+      if(error instanceof Error)
+        setAuthError(error.message)
+      else
+        setAuthError("Credenciales incorrectas");
+    }
   }
   return (
       <Card className=" px-2 py-10">
@@ -44,17 +59,24 @@ export function LoginForm() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="username">Nombre de usuario</FieldLabel>
+                {authError && 
+                  <FieldLabel className="w-full bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 p-2 rounded-sm text-xs">
+                    {authError}
+                  </FieldLabel> 
+                }
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="email">Nombre de usuario</FieldLabel>
                 <Input
-                  id="username"
+                  id="email"
                   type="text"
                   placeholder="1, 2, 3, 4, 5, 6"
-                  className={`h-10 ${errors.username ? 'border-red-500 dark:border-destructive' : ''}`}
-                  {...register('username')}
+                  className={`h-10 ${errors.email ? 'border-red-500 dark:border-destructive' : ''}`}
+                  {...register('email')}
                 />
-                  {errors.username && 
-                    <FieldLabel htmlFor="username" className="text-red-500 dark:text-destructive text-xs">
-                      {errors.username.message}
+                  {errors.email && 
+                    <FieldLabel htmlFor="email" className="text-red-500 dark:text-destructive text-xs">
+                      {errors.email.message}
                     </FieldLabel>
                   }
               </Field>
@@ -100,7 +122,7 @@ export function LoginForm() {
                 </div>
               </Field>
               <Field>
-                <Button type="submit" className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors" >Iniciar Sesión</Button>
+                <Button type="submit" className={`h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors`} disabled={isLoading}>{isLoading ? <Spinner/> : "Inciar sesion"}</Button>
               </Field>
             </FieldGroup>
           </form>

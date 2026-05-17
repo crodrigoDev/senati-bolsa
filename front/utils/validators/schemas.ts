@@ -1,13 +1,13 @@
 import  * as z from "zod";
 
 export const loginSchema = z.object({
-    username: z
+    email: z
         .string()
-        .min(1, "El nombre de usuario es requerido")
-        .max(30, "El nombre de usuario no puede tener más de 30 caracteres"),
+        .email("El email debe ser valido")
+        .min(1, "El email es requerido"),
     password: z
         .string()
-        .min(8, "La constraseña debe tener al menos 8 caracteres"),
+        .min(1, "La constraseña es requerida"),
     isRecovered: z
         .boolean()
         .optional()

@@ -1,7 +1,6 @@
 package com.example.senati_bolsa.Services;
 
 import java.time.LocalDateTime;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -78,6 +77,7 @@ public class AuthService {
             verifyCodeRepository.save(verifyCode);
             throw new RuntimeException("El código ha expirado, solicita uno nuevo");
         }
+        verifyCode.setEstado(CodigoEstado.USADO);
         verifyCodeRepository.save(verifyCode);
         return true;
     }
