@@ -10,13 +10,15 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { useForm, Controller} from "react-hook-form"
-import { verifySchema, type UsuarioVerify } from "@/utils/validators/schemas"
+import { verifySchema} from "@/utils/validators/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRecover } from "@/hooks/auth/useRecover"
+import { Spinner } from "@/components/ui/spinner"
 
 export function EmailForm() {
+  const {handleVerifyCode, loading, error} = useRecover();
   const {control, handleSubmit, formState: {errors}} = useForm({
     defaultValues: {
       pin: ''
@@ -25,18 +27,18 @@ export function EmailForm() {
     mode: "onSubmit",
     reValidateMode: "onBlur"
   })
-
-  const router = useRouter()
-
-  const onSubmit = (data: UsuarioVerify) => {
-    console.log(data)
-    router.push('/reset-password')
-  }
   return (
       <Card className=" px-2 py-10">
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(handleVerifyCode)}>
             <FieldGroup>
+                {error && 
+                  <Field>
+                    <FieldLabel className="w-full bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 p-2 rounded-sm text-xs">
+                      {error}
+                    </FieldLabel> 
+                  </Field>
+                }
               <Field>
                 <FieldLabel htmlFor="verify-code">Código de Verificación</FieldLabel>
                 <div className="flex items-center justify-center" >
@@ -67,7 +69,9 @@ export function EmailForm() {
                 }
               </Field>
               <Field>
-                <Button type="submit" className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Enviar</Button>
+                <Button type="submit" className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors" disabled={loading}>
+                  {loading ? <Spinner/> : "Enviar"}
+                </Button>
               </Field>
               <Field>
                 <Link

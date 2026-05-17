@@ -30,10 +30,10 @@ export const verifySchema = z.object({
 export const resetSchema = z.object({
     password: z
         .string()
-        .min(8, "La contraseña debe tener al menos 8 caracteres"),
+        .min(1, "La contraseña es requerida"),
     confirmPassword: z
         .string()
-        .min(8, "La contraseña debe tener al menos 8 caracteres")
+        .min(1, "La contraseña es requerida")
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
     path: ["confirmPassword"]

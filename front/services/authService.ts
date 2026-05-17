@@ -44,8 +44,46 @@ export const authService = {
             })
         });
         if (!response.ok) {
+            const errorBody = await response.json().catch(() => ({}));
+            throw new Error(errorBody.message || `Error inesperado en el servidor: ${response.status}`);
+        }
+        return response.json();
+    },
+    verify_code: async (email: string, codigo: string) => {
+        const response = await fetch(`${API_URL_BASE}/verify-code`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body:JSON.stringify({
+                email: email,
+                codigo: codigo
+            })
+        });
+        if(!response.ok){
             if(response.status === 403 || response.status === 401){
-                throw new Error("Credenciales incorrectas");
+                throw new Error("Codigo invalido o expirado");
+            }
+            const errorBody = await response.json().catch(() => ({}));
+            throw new Error(errorBody.message || `Error inesperado en el servidor: ${response.status}`);
+        }
+        return response.json();
+    },
+    reset_password: async (email: string, codigo: string, nuevaPassword: string) => {
+        const response = await fetch(`${API_URL_BASE}/reset-password`,{
+            method: "POST",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email,
+                codigo,
+                nuevaPassword
+            })
+        });
+        if(!response.ok){
+            if(response.status === 403 || response.status === 401){
+                throw new Error("Email invalido");
             }
             const errorBody = await response.json().catch(() => ({}));
             throw new Error(errorBody.message || `Error inesperado en el servidor: ${response.status}`);

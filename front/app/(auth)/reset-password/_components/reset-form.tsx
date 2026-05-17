@@ -10,18 +10,20 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { useForm} from "react-hook-form"
-import { resetSchema, type UsuarioReset } from "@/utils/validators/schemas"
+import { resetSchema} from "@/utils/validators/schemas"
 import { InputGroup, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
+import { useRecover } from "@/hooks/auth/useRecover"
+import { Spinner } from "@/components/ui/spinner"
 
 
 export function ResetForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const {handleResetPassword, loading, error} = useRecover()
   const {register, handleSubmit, formState: {errors}} = useForm({
     defaultValues: {
       password: '',
@@ -31,18 +33,18 @@ export function ResetForm() {
     mode: "onSubmit",
     reValidateMode: "onBlur"
   })
-  const router = useRouter()
-
-  const onSubmit = (data: UsuarioReset) => {
-    console.log(data)
-    router.push('/login')
-
-  }
   return (
       <Card className=" px-2 py-10">
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(handleResetPassword)}>
             <FieldGroup>
+              {error && 
+                <Field>
+                  <FieldLabel className="w-full bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 p-2 rounded-sm text-xs">
+                    {error}
+                  </FieldLabel> 
+                </Field>
+              }
               <Field>
                 <FieldLabel htmlFor="password">Nueva Contraseña</FieldLabel>
                 <InputGroup className={`flex items-center overflow-hidden h-10 p-0 ${errors.password ? 'border-red-500 dark:border-destructive' : ''}`}>
@@ -82,7 +84,9 @@ export function ResetForm() {
                 }
               </Field>
               <Field>
-                <Button type="submit" className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Recuperar</Button>
+                <Button type="submit" className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors" disabled={loading}>
+                  {loading ? <Spinner/> : "Recuperar"}
+                </Button>
               </Field>
               <Field>
                 <Link

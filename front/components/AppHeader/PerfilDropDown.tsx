@@ -2,7 +2,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuGroup, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback} from '../ui/avatar'
 import { Button } from '../ui/button'
-import { User, Settings, CircleQuestionMark, LogOut } from 'lucide-react'
+import { User, Settings, CircleQuestionMark, LogOut} from 'lucide-react'
 import { Label } from '../ui/label'
 import { Badge } from '../ui/badge'
 import Link from 'next/link'
@@ -18,6 +18,8 @@ export default function PerfilDropDown() {
         logout();
         router.push('/login')
     }
+
+    const usuario = useAuth().usuario;
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -28,7 +30,7 @@ export default function PerfilDropDown() {
             >
                 <Avatar size='lg'>
                     <AvatarFallback>
-                        AS
+                        {usuario?.nombres.charAt(0).toLocaleUpperCase()}{usuario?.apellidos.charAt(0).toLocaleUpperCase()}
                     </AvatarFallback>
                 </Avatar>
             </Button>
@@ -42,15 +44,15 @@ export default function PerfilDropDown() {
                 <div className='flex items-center gap-4'>
                     <Avatar size='lg'>
                         <AvatarFallback>
-                            AS
+                            {usuario?.nombres.charAt(0).toLocaleUpperCase()}{usuario?.apellidos.charAt(0).toLocaleUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                     <div className='flex flex-col gap-2'>
                         <div>
                             <Label className='text-sm text-foreground font-medium'>
-                                Alvaro Solis
+                                {usuario?.nombres} {usuario?.apellidos}
                             </Label>
-                            Instructor de Seguimiento
+                            {usuario?.rol == "ROLE_INSTRUCTOR_SEGUIMIENTO" ? 'Instructor de Seguimiento' : 'Indefinido'}
                         </div>
                         <Badge className='bg-green-500 text-white rounded-sm'>Activo</Badge>
                     </div>

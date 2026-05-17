@@ -37,6 +37,8 @@ public class AuthService {
             new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
         User userDetails = (User) auth.getPrincipal();
+        Usuario usuario = usuarioRepository.findByEmail(userDetails.getUsername())
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado en la base de datos"));
         String rol = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
@@ -46,7 +48,10 @@ public class AuthService {
         response.addCookie(cookie);
         AuthResponseDTO responseDTO = new AuthResponseDTO(
             userDetails.getUsername(),
-            rol
+            rol,
+            usuario.getNombres(),
+            usuario.getApellidos(),
+            usuario.getEstado()
         );
         return responseDTO;
     }
@@ -66,7 +71,7 @@ public class AuthService {
         emailService.enviarCodigoVerificacion(usuario.getEmail(), usuario.getNombres(), codigo);
     }
 
-    public boolean verificarCodigo(String email, String codigo){
+    public VerifyCode verificarCodigo(String email, String codigo){
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("El correo no esta registrado"));
         VerifyCode verifyCode = verifyCodeRepository.findTopByUsuarioAndCodigoAndEstadoOrderByFechaCreacionDesc(usuario, codigo, CodigoEstado.DISPONIBLE)
@@ -77,14 +82,15 @@ public class AuthService {
             verifyCodeRepository.save(verifyCode);
             throw new RuntimeException("El código ha expirado, solicita uno nuevo");
         }
-        verifyCode.setEstado(CodigoEstado.USADO);
-        verifyCodeRepository.save(verifyCode);
-        return true;
+        return verifyCode;
     }
-    public void cambiarPassword(String email, String nuevaPassword) {
+    public void cambiarPassword(String email, String codigo, String nuevaPassword) {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        VerifyCode verifyCode = verificarCodigo(email, codigo);
         usuario.setPassword(passwordEncoder.encode(nuevaPassword));
         usuarioRepository.save(usuario);
+        verifyCode.setEstado(CodigoEstado.USADO);
+        verifyCodeRepository.save(verifyCode);
     }
 }

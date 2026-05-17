@@ -44,23 +44,23 @@ public class AuthController {
     public ResponseEntity<ApiResponse<String>> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
         try{
             authService.procesarSolicitudRecuperacion(request.email());
+        }catch(RuntimeException e){
             return ResponseEntity.ok(new ApiResponse<>(
                 true,
-                "Codigo de verificacion enviado",
-                null
-            ));
-        }catch(RuntimeException e){
-            return ResponseEntity.badRequest().body(new ApiResponse<>(
-                true,
-                e.getMessage(),
+                "Se envió el código de verificación al correo si es que existe.",
                 null
             ));
         }
+        return ResponseEntity.ok(new ApiResponse<>(
+            true,
+            "Se envió el código de verificación al correo si es que existe.",
+            null
+        ));
     }
 
     @PostMapping("verify-code")
     public ResponseEntity<ApiResponse<String>> verifyCode(@RequestBody VerifyCodeRequestDTO request) {
-       try {
+        try {
             authService.verificarCodigo(request.email(), request.codigo());
             return ResponseEntity.ok(new ApiResponse<>(
                 true,
@@ -69,7 +69,7 @@ public class AuthController {
             ));
        } catch(RuntimeException e){
             return ResponseEntity.badRequest().body(new ApiResponse<>(
-                true,
+                false,
                 e.getMessage(),
                 null
             ));
@@ -79,7 +79,7 @@ public class AuthController {
     @PostMapping("reset-password")
     public ResponseEntity<ApiResponse<String>> resetPassword(@RequestBody CambiarPasswordRequestDTO request) {
         try {
-            authService.cambiarPassword(request.email(), request.nuevaPassword());
+            authService.cambiarPassword(request.email(), request.codigo(), request.nuevaPassword());
             return ResponseEntity.ok(new ApiResponse<>(
                 true,
                 "Contraseña cambiada correctamente",
@@ -87,7 +87,7 @@ public class AuthController {
             ));
        } catch(RuntimeException e){
             return ResponseEntity.badRequest().body(new ApiResponse<>(
-                true,
+                false,
                 e.getMessage(),
                 null
             ));
