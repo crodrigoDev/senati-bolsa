@@ -1,5 +1,7 @@
 package com.example.senati_bolsa.Config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
 import com.example.senati_bolsa.Utils.JwtFilter;
 
 import lombok.RequiredArgsConstructor;
@@ -38,10 +42,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(cors -> cors.configurationSource(request -> {
-                    var config = new org.springframework.web.cors.CorsConfiguration();
-                    config.setAllowedOrigins(java.util.List.of("http://localhost:3000"));
-                    config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    config.setAllowedHeaders(java.util.List.of("Origin", "Content-Type", "Accept", "Authorization"));
+                    var config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:3000"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(List.of("Origin", "Content-Type", "Accept", "Authorization"));
                     config.setAllowCredentials(true);
                     return config;
                 }))

@@ -42,56 +42,29 @@ public class AuthController {
 
     @PostMapping("forgot-password")
     public ResponseEntity<ApiResponse<String>> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
-        try{
-            authService.procesarSolicitudRecuperacion(request.email());
-        }catch(RuntimeException e){
-            return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Se envió el código de verificación al correo si es que existe.",
-                null
-            ));
-        }
+        authService.procesarSolicitudRecuperacion(request.email());
         return ResponseEntity.ok(new ApiResponse<>(
             true,
-            "Se envió el código de verificación al correo si es que existe.",
-            null
+            "Se envió el código de verificación al correo si es que existe."
         ));
     }
 
     @PostMapping("verify-code")
     public ResponseEntity<ApiResponse<String>> verifyCode(@RequestBody VerifyCodeRequestDTO request) {
-        try {
-            authService.verificarCodigo(request.email(), request.codigo());
-            return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Codigo verificado",
-                null
-            ));
-       } catch(RuntimeException e){
-            return ResponseEntity.badRequest().body(new ApiResponse<>(
-                false,
-                e.getMessage(),
-                null
-            ));
-       }
+        authService.verificarCodigo(request.email(), request.codigo());
+        return ResponseEntity.ok(new ApiResponse<>(
+            true,
+            "Codigo verificado"
+        ));
     }
 
     @PostMapping("reset-password")
     public ResponseEntity<ApiResponse<String>> resetPassword(@RequestBody CambiarPasswordRequestDTO request) {
-        try {
-            authService.cambiarPassword(request.email(), request.codigo(), request.nuevaPassword());
-            return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Contraseña cambiada correctamente",
-                null
-            ));
-       } catch(RuntimeException e){
-            return ResponseEntity.badRequest().body(new ApiResponse<>(
-                false,
-                e.getMessage(),
-                null
-            ));
-       }
+        authService.cambiarPassword(request.email(), request.codigo(), request.nuevaPassword());
+        return ResponseEntity.ok(new ApiResponse<>(
+            true,
+            "Contraseña cambiada correctamente"
+        ));
     }
     
     

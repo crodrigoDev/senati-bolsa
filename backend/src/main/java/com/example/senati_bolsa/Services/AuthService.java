@@ -1,6 +1,8 @@
 package com.example.senati_bolsa.Services;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -57,25 +59,31 @@ public class AuthService {
     }
 
     public void procesarSolicitudRecuperacion(String email){
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("El correo no esta registrado"));
-
-        String codigo = String.format("%06d", (int)(Math.random() * 1000000));
-        VerifyCode verifyCode = new VerifyCode();
-        verifyCode.setCodigo(codigo);
-        verifyCode.setUsuario(usuario);
-        verifyCode.setEstado(CodigoEstado.DISPONIBLE);
-        verifyCode.setFechaExpiracion(LocalDateTime.now().plusMinutes(15));
-
-        verifyCodeRepository.save(verifyCode);
-        emailService.enviarCodigoVerificacion(usuario.getEmail(), usuario.getNombres(), codigo);
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+        if(usuarioOptional.isPresent()){
+            Usuario usuario = usuarioOptional.get();
+            verifyCodeRepository.invalidarCodigos(usuario, CodigoEstado.DISPONIBLE, CodigoEstado.EXPIRADO);
+            String codigo = String.format("%06d", (int)(Math.random() * 1000000));
+            VerifyCode verifyCode = new VerifyCode();
+            verifyCode.setCodigo(codigo);
+            verifyCode.setUsuario(usuario);
+            verifyCode.setEstado(CodigoEstado.DISPONIBLE);
+            verifyCode.setFechaExpiracion(LocalDateTime.now().plusMinutes(15));
+    
+            verifyCodeRepository.save(verifyCode);
+            emailService.enviarCodigoVerificacion(usuario.getEmail(), usuario.getNombres(), codigo);
+        }
     }
 
     public VerifyCode verificarCodigo(String email, String codigo){
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("El correo no esta registrado"));
+        Usuario usuario = null;
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+        if(usuarioOptional.isPresent()){
+            usuario = usuarioOptional.get();
+        }
         VerifyCode verifyCode = verifyCodeRepository.findTopByUsuarioAndCodigoAndEstadoOrderByFechaCreacionDesc(usuario, codigo, CodigoEstado.DISPONIBLE)
                 .orElseThrow(() -> new RuntimeException("Codigo invalido"));
+        
 
         if(verifyCode.getFechaExpiracion().isBefore(LocalDateTime.now())){
             verifyCode.setEstado(CodigoEstado.EXPIRADO);
@@ -85,12 +93,15 @@ public class AuthService {
         return verifyCode;
     }
     public void cambiarPassword(String email, String codigo, String nuevaPassword) {
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        VerifyCode verifyCode = verificarCodigo(email, codigo);
-        usuario.setPassword(passwordEncoder.encode(nuevaPassword));
-        usuarioRepository.save(usuario);
-        verifyCode.setEstado(CodigoEstado.USADO);
-        verifyCodeRepository.save(verifyCode);
+        Usuario usuario = null;
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+        if(usuarioOptional.isPresent()){
+            usuario = usuarioOptional.get();
+            usuario.setPassword(passwordEncoder.encode(nuevaPassword));
+            usuarioRepository.save(usuario);
+            VerifyCode verifyCode = verificarCodigo(email, codigo);
+            verifyCode.setEstado(CodigoEstado.USADO);
+            verifyCodeRepository.save(verifyCode);
+        }
     }
 }
