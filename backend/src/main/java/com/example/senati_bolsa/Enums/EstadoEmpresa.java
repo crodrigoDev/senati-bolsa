@@ -1,5 +1,8 @@
 package com.example.senati_bolsa.Enums;
 
-public class EstadoEmpresa {
-    
+public enum EstadoEmpresa {
+    activa,
+    por_validar,
+    inactiva,
+    suspendida
 }
