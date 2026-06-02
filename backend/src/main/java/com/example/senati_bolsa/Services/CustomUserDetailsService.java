@@ -1,6 +1,6 @@
 package com.example.senati_bolsa.Services;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .password(usuario.getPassword())
                 .disabled(!habilitado)
                 .accountLocked(!noBloqueado)
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(usuario.getRol().getNombre())))
+                .authorities(Arrays.asList(new SimpleGrantedAuthority(usuario.getRol().getNombre())))
                 .build();
     }
     
