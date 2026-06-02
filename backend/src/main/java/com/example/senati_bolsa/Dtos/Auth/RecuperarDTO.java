@@ -12,6 +12,7 @@ public class RecuperarDTO{
 
     public static record CambiarPasswordRequestDTO(
         String email,
+        String codigo,
         String nuevaPassword
     ) {}
 }

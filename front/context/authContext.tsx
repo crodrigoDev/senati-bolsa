@@ -33,7 +33,10 @@ export function AuthProvider({children} : {children: React.ReactNode}) {
         if(dto){
             const usuarioData = {
                 email: dto.email,
-                rol: dto.rol
+                rol: dto.rol,
+                nombres: dto.nombres,
+                apellidos: dto.apellidos,
+                estado: dto.estado
             }
             setUsuario(usuarioData)
             localStorage.setItem("usuario_bolsa", JSON.stringify(usuarioData));

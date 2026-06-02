@@ -11,14 +11,15 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useForm} from "react-hook-form"
-import { recoverSchema, type UsuarioRecover } from "@/utils/validators/schemas"
+import { recoverSchema} from "@/utils/validators/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useRecover } from "@/hooks/auth/useRecover"
+import { Spinner } from "@/components/ui/spinner"
 
 
 export function EmailForm() {
-  const { handleSendEmail } = useRecover();
+  const { handleSendEmail, loading } = useRecover();
   const {register, handleSubmit, formState: {errors}} = useForm({
     defaultValues: {
       email: ''
@@ -28,13 +29,10 @@ export function EmailForm() {
     reValidateMode: "onBlur"
   })
 
-  const onSubmit = (data: UsuarioRecover) => {
-    handleSendEmail(data)
-  }
   return (
       <Card className=" px-2 py-10">
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(handleSendEmail)}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
@@ -52,7 +50,9 @@ export function EmailForm() {
                   }
               </Field>
               <Field>
-                <Button type="submit" className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Enviar</Button>
+                <Button type="submit" className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors" disabled={loading}>
+                  {loading ? <Spinner/> : "Enviar"}
+                </Button>
               </Field>
               <Field>
                 <Link

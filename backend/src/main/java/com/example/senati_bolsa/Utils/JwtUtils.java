@@ -6,6 +6,7 @@ import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -34,5 +35,23 @@ public class JwtUtils {
         cookie.setPath("/");
         cookie.setMaxAge(EXPIRATION_TIME / 1000);
         return cookie;
+    }
+
+    public String extraerEmail(String token){
+        return extraerTodosLosClaims(token).getSubject();
+    }
+
+    public boolean validarToken(String token, String email){
+        final String tokenEmail = extraerEmail(token);
+        return (tokenEmail.equals(email) && !extraerTodosLosClaims(token).getExpiration().before(new Date()));
+    }
+
+
+    private Claims extraerTodosLosClaims(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

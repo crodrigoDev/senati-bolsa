@@ -58,19 +58,19 @@ export function LoginForm() {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
+              {authError && 
+                <Field>
+                    <FieldLabel className="w-full bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 p-2 rounded-sm text-xs">
+                      {authError}
+                    </FieldLabel> 
+                </Field>
+              }
               <Field>
-                {authError && 
-                  <FieldLabel className="w-full bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 p-2 rounded-sm text-xs">
-                    {authError}
-                  </FieldLabel> 
-                }
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="email">Nombre de usuario</FieldLabel>
+                <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
                 <Input
                   id="email"
                   type="text"
-                  placeholder="1, 2, 3, 4, 5, 6"
+                  placeholder="example@email.com"
                   className={`h-10 ${errors.email ? 'border-red-500 dark:border-destructive' : ''}`}
                   {...register('email')}
                 />
@@ -122,7 +122,7 @@ export function LoginForm() {
                 </div>
               </Field>
               <Field>
-                <Button type="submit" className={`h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors`} disabled={isLoading}>{isLoading ? <Spinner/> : "Inciar sesion"}</Button>
+                <Button type="submit" className={`h-10 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors`} disabled={isLoading}>{isLoading ? <Spinner/> : "Iniciar sesion"}</Button>
               </Field>
             </FieldGroup>
           </form>
